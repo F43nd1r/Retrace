@@ -22,26 +22,20 @@ package proguard.obfuscate;
 
 
 /**
- * This interface specifies methods to process name mappings between original
- * classes and their obfuscated versions. The mappings are typically read
- * from a mapping file.
- *
- * @see MappingReader
+ * This interface specifies methods to process name mappings between original classes and their obfuscated versions.
+ * The mappings are typically read from a mapping file.
  *
  * @author Eric Lafortune, modified by F43nd1r
+ * @see MappingReader
  */
-public interface MappingProcessor
-{
+public interface MappingProcessor {
     /**
      * Processes the given class name mapping.
      *
      * @param className    the original class name.
      * @param newClassName the new class name.
-     * @return whether the processor is interested in receiving mappings of the
-     *         class members of this class.
      */
-    public boolean processClassMapping(String className,
-                                       String newClassName);
+    void processClassMapping(String className, String newClassName);
 
     /**
      * Processes the given field name mapping.
@@ -51,29 +45,18 @@ public interface MappingProcessor
      * @param fieldName    the original field name.
      * @param newFieldName the new field name.
      */
-    public void processFieldMapping(String className,
-                                    String fieldType,
-                                    String fieldName,
-                                    String newFieldName);
+    void processFieldMapping(String className, String fieldType, String fieldName, String newFieldName);
 
     /**
      * Processes the given method name mapping.
      *
      * @param className        the original class name.
-     * @param firstLineNumber  the first line number of the method, or 0 if it
-     *                         is not known.
-     * @param lastLineNumber   the last line number of the method, or 0 if it
-     *                         is not known.
+     * @param firstLineNumber  the first line number of the method, or 0 if it is not known.
+     * @param lastLineNumber   the last line number of the method, or 0 if it is not known.
      * @param methodReturnType the original external method return type.
      * @param methodName       the original external method name.
      * @param methodArguments  the original external method arguments.
      * @param newMethodName    the new method name.
      */
-    public void processMethodMapping(String className,
-                                     int firstLineNumber,
-                                     int lastLineNumber,
-                                     String methodReturnType,
-                                     String methodName,
-                                     String methodArguments,
-                                     String newMethodName);
+    void processMethodMapping(String className, int firstLineNumber, int lastLineNumber, String methodReturnType, String methodName, String methodArguments, String newMethodName);
 }

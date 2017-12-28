@@ -20,46 +20,36 @@
  */
 package proguard.classfile.util;
 
-import proguard.classfile.*;
-
 /**
- * Utility methods for converting between internal and external representations
- * of names and descriptions.
+ * Utility methods for converting between internal and external representations of names and descriptions.
  *
  * @author Eric Lafortune, modified by F43nd1r
  */
-public class ClassUtil
-{
+public class ClassUtil {
 
+
+    private static final char JAVA_PACKAGE_SEPARATOR = '.';
+    private static final char CLASS_PACKAGE_SEPARATOR = '/';
 
     /**
      * Converts an external class name into an internal class name.
-     * @param externalClassName the external class name,
-     *                          e.g. "<code>java.lang.Object</code>"
-     * @return the internal class name,
-     *                          e.g. "<code>java/lang/Object</code>".
+     *
+     * @param externalClassName the external class name e.g. "<code>java.lang.Object</code>"
+     * @return the internal class name, e.g. "<code>java/lang/Object</code>".
      */
-    public static String internalClassName(String externalClassName)
-    {
-        return externalClassName.replace(JavaConstants.PACKAGE_SEPARATOR,
-                                         ClassConstants.PACKAGE_SEPARATOR);
+    public static String internalClassName(String externalClassName) {
+        return externalClassName.replace(JAVA_PACKAGE_SEPARATOR, CLASS_PACKAGE_SEPARATOR);
     }
 
 
     /**
      * Converts an internal class name into an external class name.
-     * @param internalClassName the internal class name,
-     *                          e.g. "<code>java/lang/Object</code>".
-     * @return the external class name,
-     *                          e.g. "<code>java.lang.Object</code>".
+     *
+     * @param internalClassName the internal class name, e.g. "<code>java/lang/Object</code>".
+     * @return the external class name, e.g. "<code>java.lang.Object</code>".
      */
-    public static String externalClassName(String internalClassName)
-    {
-        return //internalClassName.startsWith(ClassConstants.PACKAGE_JAVA_LANG) &&
-               //internalClassName.indexOf(ClassConstants.PACKAGE_SEPARATOR, ClassConstants.PACKAGE_JAVA_LANG.length() + 1) < 0 ?
-               //internalClassName.substring(ClassConstants.PACKAGE_JAVA_LANG.length()) :
-               internalClassName.replace(ClassConstants.PACKAGE_SEPARATOR,
-                                         JavaConstants.PACKAGE_SEPARATOR);
+    public static String externalClassName(String internalClassName) {
+        return internalClassName.replace(CLASS_PACKAGE_SEPARATOR, JAVA_PACKAGE_SEPARATOR);
     }
 
 
