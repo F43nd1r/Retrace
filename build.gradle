@@ -1,0 +1,14 @@
+plugins {
+    id "java"
+    id "com.jfrog.bintray" version "1.8.0"
+}
+
+group 'com.faendir.proguard'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+bintray {
+    user = artifactoryUser
+    key = artifactoryApiKey
+}
