@@ -56,6 +56,7 @@ implements   MappingProcessor
     private final boolean verbose;
     private final Reader mapping;
     private final Reader stackTrace;
+    private final Writer output;
 
     private Map classMap       = new HashMap();
     private Map classFieldMap  = new HashMap();
@@ -65,24 +66,43 @@ implements   MappingProcessor
     /**
      * Creates a new ReTrace object to process a stack trace from the given file,
      * based on the given mapping file name.
+ * @param regularExpression the regular expression for parsing the lines in
+     *                          the stack trace.
+     * @param verbose           specifies whether the de-obfuscated stack trace
+     *                          should be verbose.
+ * @param mapping       the mapping file that was written out by
+ *                          ProGuard.
+ * @param stackTrace    the optional name of the file that contains the
+     */
+    public ReTrace(String regularExpression,
+                   boolean verbose,
+                   Reader mapping,
+                   Reader stackTrace) {
+        this(regularExpression, verbose, mapping, stackTrace, new OutputStreamWriter(System.out));
+    }
+
+    /**
+     * Creates a new ReTrace object to process a stack trace from the given file,
+     * based on the given mapping file name.
      * @param regularExpression the regular expression for parsing the lines in
      *                          the stack trace.
      * @param verbose           specifies whether the de-obfuscated stack trace
      *                          should be verbose.
      * @param mapping       the mapping file that was written out by
-     *                          ProGuard.
+ *                          ProGuard.
      * @param stackTrace    the optional name of the file that contains the
-     *                          stack trace.
+     * @param output the output writer
      */
-    public ReTrace(String  regularExpression,
+    public ReTrace(String regularExpression,
                    boolean verbose,
                    Reader mapping,
-                   Reader stackTrace)
+                   Reader stackTrace, Writer output)
     {
         this.regularExpression = regularExpression;
         this.verbose           = verbose;
         this.mapping = mapping;
         this.stackTrace = stackTrace;
+        this.output = output;
     }
 
 
@@ -161,6 +181,8 @@ implements   MappingProcessor
             new LineNumberReader(stackTrace == null ?
                 (Reader)new InputStreamReader(System.in) :
                 (Reader)new BufferedReader(stackTrace));
+
+        PrintWriter output = new PrintWriter(this.output);
 
         // Read and process the lines of the stack trace.
         try
@@ -302,19 +324,19 @@ implements   MappingProcessor
                     outLine.append(line.substring(lineIndex));
 
                     // Print out the processed line.
-                    System.out.println(outLine);
+                    output.println(outLine);
 
                     // Print out any additional lines.
                     for (int extraLineIndex = 0; extraLineIndex < extraOutLines.size(); extraLineIndex++)
                     {
-                        System.out.println(extraOutLines.get(extraLineIndex));
+                        output.println(extraOutLines.get(extraLineIndex));
                     }
                 }
                 else
                 {
                     // The line didn't match the regular expression.
                     // Print out the original line.
-                    System.out.println(line);
+                    output.println(line);
                 }
             }
         }
@@ -324,6 +346,7 @@ implements   MappingProcessor
         }
         finally
         {
+            output.flush();
             if (stackTrace != null)
             {
                 try
